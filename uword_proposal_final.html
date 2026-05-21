@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>感情より、仕組み。</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  background: #FAFAF8;
+  color: #1a1a1a;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+.serif { font-family: 'Cormorant Garamond', 'Hiragino Mincho ProN', serif; }
+.container { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.header-line { height: 3px; background: linear-gradient(90deg, #0F6E56, #5DCAA5, #0F6E56); }
+.hero { padding: 3.5rem 0 2.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid #e4e4de; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.hero.visible { opacity: 1; transform: translateY(0); }
+.hero-label { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; color: #0F6E56; text-transform: uppercase; margin-bottom: 16px; }
+.hero-title { font-size: clamp(28px, 6vw, 42px); font-weight: 600; line-height: 1.25; margin-bottom: 16px; color: #0d0d0d; letter-spacing: -0.01em; }
+.hero-title .accent { color: #0F6E56; }
+.hero-sub { font-size: 15px; color: #6b6b65; line-height: 1.8; max-width: 500px; border-left: 2px solid #e4e4de; padding-left: 16px; }
+.bi-box { background: #fff; border: 1px solid #e4e4de; border-radius: 16px; padding: 1.5rem; margin-bottom: 3rem; position: relative; overflow: hidden; }
+.bi-box-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #0F6E56, #5DCAA5); }
+.bi-box-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; color: #0F6E56; text-transform: uppercase; margin-bottom: 10px; }
+.bi-box-title { font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #0d0d0d; }
+.bi-box-body { font-size: 13.5px; color: #555; line-height: 1.85; }
+.section { margin-bottom: 3rem; }
+.eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; color: #0F6E56; text-transform: uppercase; margin-bottom: 10px; }
+.section-title { font-size: 22px; font-weight: 600; margin-bottom: 14px; line-height: 1.4; color: #0d0d0d; }
+.body { font-size: 14px; color: #555; line-height: 1.85; margin-bottom: 16px; }
+.divider { display: flex; align-items: center; gap: 12px; margin: 2.5rem 0; }
+.divider-line { flex: 1; height: 1px; background: #e4e4de; }
+.divider-dot { width: 4px; height: 4px; border-radius: 50%; background: #0F6E56; opacity: 0.4; }
+.card { background: #fff; border: 1px solid #e4e4de; border-radius: 14px; padding: 1.1rem 1.25rem; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.2s; }
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+.card-title { font-size: 13.5px; font-weight: 700; margin-bottom: 6px; color: #1a1a1a; }
+.card-body { font-size: 13px; color: #666; line-height: 1.8; }
+.card-list { list-style: none; padding: 0; }
+.card-list li { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid #f0f0ea; font-size: 13.5px; color: #4a4a44; line-height: 1.7; }
+.card-list li:last-child { border-bottom: none; }
+.x-icon { color: #B03030; flex-shrink: 0; margin-top: 3px; font-size: 11px; font-weight: 700; }
+.arrow-row { display: flex; align-items: stretch; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+.arrow-box { flex: 1; min-width: 200px; border-radius: 12px; padding: 1rem; font-size: 13.5px; line-height: 1.7; }
+.arrow-box-red { background: #FDF0F0; color: #6b1f1f; border: 1px solid #f5d0d0; }
+.arrow-box-green { background: #EAF7F1; color: #085041; border: 1px solid #b8e8d4; }
+.arrow-label-red { font-weight: 700; margin-bottom: 6px; font-size: 12px; color: #A32D2D; letter-spacing: 0.04em; }
+.arrow-label-green { font-weight: 700; margin-bottom: 6px; font-size: 12px; color: #0F6E56; letter-spacing: 0.04em; }
+.arrow-icon { display: flex; align-items: center; flex-shrink: 0; font-size: 18px; color: #bbb; }
+.quote { border-left: 3px solid #0F6E56; padding: 14px 20px; margin: 20px 0; background: linear-gradient(135deg, #EAF7F1, #d4f0e4); border-radius: 0 12px 12px 0; }
+.quote-text { font-size: 17px; font-weight: 600; color: #085041; line-height: 1.65; font-style: italic; }
+.quote-attr { font-size: 11.5px; color: #0F6E56; margin-top: 8px; font-weight: 500; }
+.quote-attr a { color: #0F6E56; margin-left: 4px; text-decoration: underline; }
+.platform-box { background: linear-gradient(135deg, #EAF7F1 0%, #d4f0e4 100%); border: 1px solid #b8e8d4; border-radius: 16px; padding: 1.5rem; margin: 16px 0; }
+.platform-eyebrow { font-size: 10px; font-weight: 700; color: #0F6E56; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 10px; }
+.platform-title { font-size: 20px; font-weight: 600; color: #085041; margin-bottom: 14px; }
+.check-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; font-size: 13.5px; color: #085041; line-height: 1.7; }
+.check { color: #0F6E56; flex-shrink: 0; margin-top: 3px; font-weight: 700; font-size: 12px; }
+.note-box { background: #fff; border: 1px solid #e4e4de; border-left: 3px solid #bbb; border-radius: 14px; padding: 1.1rem 1.25rem; margin: 16px 0; }
+.note-title { font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #555; letter-spacing: 0.04em; }
+.note-body { font-size: 13px; color: #666; line-height: 1.8; }
+.goal-box { background: linear-gradient(135deg, #f5f5f0 0%, #eeede8 100%); border-radius: 14px; padding: 1.25rem 1.5rem; margin: 16px 0; border: 1px solid #e4e4de; }
+.goal-label { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #444; letter-spacing: 0.06em; text-transform: uppercase; }
+.goal-body { font-size: 13.5px; color: #4a4a44; line-height: 1.85; }
+.step { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+.step-circle { width: 30px; height: 30px; border-radius: 50%; background: #EAF7F1; color: #0F6E56; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px solid #b8e8d4; transition: background 0.2s, color 0.2s; }
+.step:hover .step-circle { background: #0F6E56; color: #fff; }
+.step-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #1a1a1a; }
+.step-desc { font-size: 13px; color: #666; line-height: 1.75; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.tag { background: #EAF7F1; color: #0F6E56; border: 1px solid #b8e8d4; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600; }
+.footer { font-size: 12px; color: #999; line-height: 1.8; padding: 1.5rem 0; border-top: 1px solid #e4e4de; margin-top: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 500px) { .grid2 { grid-template-columns: 1fr; } .arrow-row { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+<!-- 認証画面 -->
+<div id="auth-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#FAFAF8; z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
+  <div style="text-align:center; max-width:320px; padding:2rem;">
+    <div style="font-family:'Cormorant Garamond', serif; font-size:22px; font-weight:600; color:#0d0d0d; margin-bottom:8px;">感情より、仕組み。</div>
+    <div style="font-size:11px; font-weight:600; letter-spacing:0.16em; color:#0F6E56; text-transform:uppercase; margin-bottom:32px;">Private Document</div>
+    <input id="pass-input" type="password" placeholder="パスワードを入力" style="width:100%; padding:12px 16px; border:1px solid #e4e4de; border-radius:10px; font-size:15px; outline:none; text-align:center; background:#fff; margin-bottom:12px;" />
+    <div id="pass-error" style="display:none; font-size:12px; color:#A32D2D; margin-bottom:12px;">パスワードが違います</div>
+    <button onclick="submitPassword()" style="width:100%; padding:12px; background:#0F6E56; color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; letter-spacing:0.06em;">入る</button>
+  </div>
+</div>
+
+<!-- メインコンテンツ -->
+<div id="main-content" style="display:none;">
+
+<div class="header-line"></div>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <div class="hero-label">吉田凪沙からの提案 — 2026.5</div>
+    <div class="hero-title serif">
+      感情より、仕組み。それは捉え方次第。
+    </div>
+    <div style="font-family: 'Cormorant Garamond', 'Hiragino Mincho ProN', serif; font-size: clamp(18px, 4vw, 26px); font-weight: 400; color: #0F6E56; margin-bottom: 20px; letter-spacing: -0.01em;">
+      <span class="accent">U+WORD</span>で、ベーシックインカムをつくる。
+    </div>
+    <div class="hero-sub">
+      気合や根性に頼らなくていい。愛から設計された"本来の"仕組みが自然に回り続ける状態を、一緒につくりませんか。
+    </div>
+  </div>
+
+  <!-- ベーシックインカムとは -->
+  <div class="bi-box">
+    <div class="bi-box-line"></div>
+    <div class="bi-box-eyebrow">Basic Income とは</div>
+    <div class="bi-box-title serif">ベーシックインカムとは</div>
+    <div class="bi-box-body">
+      ベーシックインカムとは、すべての人が「働いているかどうかに関わらず」、生活に必要な最低限の収入を得られる状態のことです。<br><br>
+      ここでいうU+WORDのベーシックインカムは、国の制度の話ではありません。「生活費の一部をポイントで賄える状態が、仕組みとして自動的に回り続ける」こと。つまり、気合や根性なしに、経済が循環している状態を指しています。
+    </div>
+  </div>
+
+  <!-- 01 -->
+  <div class="section">
+    <div class="eyebrow">01 — 現状の正直な話</div>
+    <div class="section-title serif">あなたも感じていませんか、このモヤモヤを。</div>
+    <p class="body">U+WORDに関わって知った、ワクワクと可能性。でも実際は、苦しみと違和感の連続。それは、仕組みのフォーカスポイントがズレていたからだった。</p>
+    <div class="card">
+      <ul class="card-list">
+        <li><span class="x-icon">✕</span><span>SAチャレンジに乗ったはいいが、判断期間が短すぎて、焦りの中で決めた。今思えばあれは判断ミスだったかもしれない。</span></li>
+        <li><span class="x-icon">✕</span><span>コミュニティのセミナーに行くと、上位層の空気感に飲み込まれる。同調圧力に近いものを感じて、窮屈だった。</span></li>
+        <li><span class="x-icon">✕</span><span>加盟店の売上報酬が50〜55%では、本気でU+WORDで商売しようという気になれなかった。コストに見合わない感覚があった。</span></li>
+        <li><span class="x-icon">✕</span><span>活動ができなくなった。でも誰かに言うことも、相談することも、なんとなくできなかった。</span></li>
+      </ul>
+    </div>
+    <p class="body">そして、見落とされがちなもう一つの苦しさ。サポーターの問題です。善意や奉仕の気持ちで支えようとするあまり、気づけば支える側が先に壊れていく。サポーターが疲弊して、組織ごと崩れていく。この状況、少なくはないと感じています。</p>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 02 -->
+  <div class="section">
+    <div class="eyebrow">02 — 気づき</div>
+    <div class="section-title serif">問題は感情じゃなくて、仕組みの捉え方だった。</div>
+    <p class="body">ユーワー道という理念は美しい。野村社長の源は愛そのもの。でも、その「愛」を感情ベースで理解すると、ズレていく。愛から設計された仕組みだからこそ、その捉え方が重要。</p>
+    <div class="arrow-row">
+      <div class="arrow-box arrow-box-red">
+        <div class="arrow-label-red">感情ベースで捉えがち</div>
+        モチベーションに左右される。依存、恐れ、焦りといった苦しみの温床になりかねない。サポーターも含め、関わる人全員が消耗していく。
+      </div>
+      <div class="arrow-icon">→</div>
+      <div class="arrow-box arrow-box-green">
+        <div class="arrow-label-green">仕組みベース（目指すもの）</div>
+        感情の状態に関係なく機能する。体調が悪くても、気分が乗らなくても、仕組みが回っていれば経済（愛）は循環する。
+      </div>
+    </div>
+    <div class="quote">
+      <div class="quote-text serif">「やりたいこと」を探すのか、「やりがい」を探すのか。外に目が向いた時、お金の流れは変わる。</div>
+      <div class="quote-attr">— 崔燎平さんの言葉より<a href="https://youtu.be/oDLGzYMWcVk?si=ziuV_1xR0Ywtdh6u" target="_blank" rel="noopener noreferrer">（Youtube）</a></div>
+    </div>
+    <p class="body">この1年近く、徹底的に内観して、自分と向き合ってきた。その中でわかったのは、外に目が向いたとき、はじめて仕組みが見えてくるということ。フォーカスポイントが変わった。それだけのことだった。</p>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 02.5 -->
+  <div class="section">
+    <div class="eyebrow">02.5 — 補足：MLMへの違和感を論理で解消する</div>
+    <div class="section-title serif">「上の人が楽して儲けてる」「MLMって怪しい」は、誤解です。</div>
+    <p class="body">MLMへの違和感には、大きく2つの正体があります。①「上の人にずっと報酬が入る構造」への罪悪感、②「MLM自体」への不信感。どちらも、論理的に解消できます。</p>
+
+    <div class="card">
+      <div class="card-title">① 権利収入は「過去の労働の対価」</div>
+      <div class="card-body">人気作家は寝ていても印税が入る。特許を持つ発明家は使われるたびに報酬をもらう。それを「楽して儲けてる」とは誰も言わない。権利収入とは、過去に築いた仕組みや関係性に対して報酬が発生し続けるもの。サラリーマンが今月働いた分を今月もらうのと、構造が違うだけで、どちらも正当な対価です。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">② 上位者が報酬をもらう理由</div>
+      <div class="card-body">U+WORDで言えば、上位者はそのメンバーを紹介し、育成し、サポートしてきた。その関係性を築くのに、時間・エネルギー・お金をかけてきた。報酬はその蓄積への対価です。何もしていないのに入るわけじゃない。仕組みを作ることに投資してきた人が、仕組みから報酬をもらっている。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">③ 「楽して儲ける＝悪」という思い込みの正体</div>
+      <div class="card-body">「今、何もしていないのにお金が入っている」——その状態を「楽してる」と感じるなら、まずその感覚自体に気づくことが大事です。<br><br>あなたの家に水道と電気が通っているのは、かつて誰かが整備したから。毎月支払っている料金は、その「過去の労働と仕組み」への使用料です。それを「楽して儲けてる」とは誰も思わない。<br><br>仕組みを作った人が、その仕組みが使われるたびに対価を受け取る。それはインフラとまったく同じ構造です。<br><br>問うべきは「楽してるかどうか」ではなく、「誰かの役に立っているかどうか」。その基準で見たとき、U+WORDの構造は何も後ろめたくない。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">④ U+WORDにおける上位者の役割</div>
+      <div class="card-body">「上の人だけが得をする構造」と見えるなら、報酬がどこから生まれるかを確認してみてください。<br><br>U+WORDの報酬は、新規登録・メンバーの月会費・ポイント売上など、複数の流通から発生します。先に始めていても、組織が育っていなければ報酬は少ない。後から始めた人が、先輩より多く稼ぐことも普通にある。<br><br>報酬は「順番」ではなく「どれだけ経済圏を育てたか」への対価です。仕組みが動いているほど報酬が増え、止まれば報酬も止まる。搾取ではなく、経済を循環させ続けることへの貢献報酬です。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">⑤ MLMへの不信感の解消 ——「知ってるあのサービスと同じ仕組み」から入る</div>
+      <div class="card-body">
+        「MLMです」と説明するより先に、すでに使い慣れたサービスの仕組みとして見せる方が、受け取りやすい。友達紹介で報酬が発生する構造は、実は身近なサービスでも普通に使われています。
+        <div class="tag-row">
+          <span class="tag">Dropbox</span>
+          <span class="tag">Airbnb</span>
+          <span class="tag">Uber</span>
+          <span class="tag">楽天</span>
+          <span class="tag">PayPay</span>
+          <span class="tag">メルカリ</span>
+        </div>
+        <div style="margin-top: 10px;">これらはすべて、紹介・利用・流通に応じて報酬やポイントが発生する構造を持っています。「MLM」という言葉への先入観を外してから、AmwayやNu Skinの話を補足として加えると、理解がスムーズになります。</div>
+      </div>
+    </div>
+    <div class="quote">
+      <div class="quote-text serif">仕組みを作り、育て、循環させた人が、仕組みから報酬をもらう。それだけのこと。</div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 03 -->
+  <div class="section">
+    <div class="eyebrow">03 — なぜ今なのか</div>
+    <div class="section-title serif">新プラットフォームの発表が、この提案を確信に変えた。</div>
+    <p class="body">2026年5月、U+WORDの新プラットフォームが発表されました。これがあるから、ビジョンが鮮明になりました。</p>
+    <div class="platform-box">
+      <div class="platform-eyebrow">新プラットフォーム 主な変更点</div>
+      <div class="platform-title serif">ポイント経済圏が、本物になる。</div>
+      <div class="check-item"><span class="check">✓</span><span>加盟店への報酬が50〜55% → 実質95〜97%へ。自分のサービスをU+WORDで展開する意味が初めて生まれた。</span></div>
+      <div class="check-item"><span class="check">✓</span><span>1P＝1円で全メニューに使える。ポイントが現金と同等の価値を持つ。</span></div>
+      <div class="check-item"><span class="check">✓</span><span>ポイント付与特典（新設）。加盟店が0〜30%の還元率を設定でき、加盟店間で経済が循環する。</span></div>
+      <div class="check-item"><span class="check">✓</span><span>月間売上1万P未満の加盟店は月掲載料免除。小さく続けながら育てる選択肢が生まれた。</span></div>
+      <div class="check-item"><span class="check">✓</span><span>QR決済機能（新設）。店舗でのポイント決済がペイペイのように簡単になる。</span></div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 04 -->
+  <div class="section">
+    <div class="eyebrow">04 — 提案</div>
+    <div class="section-title serif">やめない戦略。応援だけで丸儲けな状態をつくる。</div>
+    <p class="body">「生きてるだけで丸儲け」ならぬ、「応援だけで丸儲け」な状態。U+WORDの収益＋ポイントで生活が成立する実証を、ここから一緒にやっていきませんか。</p>
+    <div class="note-box">
+      <div class="note-title">はじめに：これは既存の体制を否定するものではありません</div>
+      <div class="note-body">SAチャレンジプログラムは、U+WORDの成長を支える大切な仕組みです。ここで提案するのは、それを「補完する設計」。土台が整った状態でSAチャレンジに乗れる人を増やすための、土台づくりのアプローチです。</div>
+    </div>
+    <div style="margin: 24px 0;">
+      <p style="font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #1a1a1a;">ここで、一つの問いかけをさせてください。</p>
+      <div class="arrow-row">
+        <div class="arrow-box arrow-box-red">
+          <div class="arrow-label-red">もろい組織を早く作る</div>
+          人数は増える。でも土台が弱い人が多いと、サポーターが疲弊する。崩れていく組織を再構築する時間と労力は、実は膨大です。
+        </div>
+        <div class="arrow-icon" style="font-size: 15px;">vs</div>
+        <div class="arrow-box arrow-box-green">
+          <div class="arrow-label-green">強い組織をじっくり作る</div>
+          土台が整った人だけが動く。サポーターも消耗しない。一度機能し始めたら、崩れにくい。結果として、確実で速い。
+        </div>
+      </div>
+    </div>
+    <p class="body">急いで大きくすることが、必ずしも良いわけじゃない。崩れた後の再構築を考えたら、最初から強く小さく作る方が、トータルで確実で速いのです。</p>
+    <div class="goal-box">
+      <div class="goal-label">目指す状態</div>
+      <div class="goal-body">月15万円分の価値をポイント＋現金で賄える。食事・美容・日用品・学びをU+WORDの中で循環させる。それが証明できたら、「私はU+WORDで生活できています」という最強のコンテンツになる。</div>
+    </div>
+    <p class="body">そのために、グループ内でこの設計を実装します。</p>
+    <div class="step">
+      <div class="step-circle">1</div>
+      <div><div class="step-title">新しい人が入る前に、3条件チェックを行う</div><div class="step-desc">経済的余裕・時間的余裕・精神的余裕。この3つが揃っているかを一緒に確認する。焦りや恐れからではなく、凪の状態で判断する。サポーターを守るためにも、この入口の設計は欠かせない。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <div><div class="step-title">ルートを2つ用意する</div><div class="step-desc">3条件が揃った人 → SAチャレンジ（3ヶ月集中）。どれかが欠けている人 → 無期限ルートで土台作り。SAチャレンジは否定しない。土台が整った人が、ちゃんと乗れる状態を作る。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <div><div class="step-title">加盟店の充実を一緒に作る</div><div class="step-desc">食品・飲食・生活必需品系の加盟店を地道に増やしていく。ポイントを使える場所が増えることで、循環が本物になる。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <div><div class="step-title">気づいたら、SAチャレンジなしでSA達成している</div><div class="step-desc">「意図しなさい」「期限を決めなさい」——その言葉に焦りを感じたなら、それは苦しみベースのサイン。本来の意図とは、静かで揺るがないもの。主張せず、押し売りせず、仕組みが機能した結果だけが見える。それが「感情より仕組み」の体現。</div></div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 04.5 -->
+  <div class="section">
+    <div class="eyebrow">04.5 — 12月まで、今できること</div>
+    <div class="section-title serif">6ヶ月は、あっという間。</div>
+    <p class="body">新プラットフォームは2025年12月開始予定。それまでの期間を、どう過ごすかで結果が変わります。</p>
+
+    <div class="step">
+      <div class="step-circle">1</div>
+      <div><div class="step-title">苦しみから行動しない</div><div class="step-desc">恐れや焦りからの行動は、仕組みではなく感情ベース。凪の状態で、次の一手を選ぶ。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <div><div class="step-title">仕組みにフォーカスする</div><div class="step-desc">感情が揺れても、仕組みに目を戻す。それだけで、消耗が止まる。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <div><div class="step-title">今できる関わりを、無理のない範囲で持つ</div><div class="step-desc">サービス提供、イベント参加、つながりを育てる。小さくても、続けることが土台になる。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <div><div class="step-title">今の加盟店売上が、12月に倍近くになる可能性がある</div><div class="step-desc">報酬還元が半分のうちに構築したサービスや関係性は、新プラットフォームで大きく化ける可能性を持っている。</div></div>
+    </div>
+    <div class="step">
+      <div class="step-circle">5</div>
+      <div><div class="step-title">今から意図して準備する</div><div class="step-desc">6ヶ月はあっという間。「準備ができたら」では遅い。今この瞬間が、準備の始まり。</div></div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 05 -->
+  <div class="section">
+    <div class="eyebrow">05 — 小さな経済圏の可能性</div>
+    <div class="section-title serif">10万人という数字ではなく、密度が大事。</div>
+    <p class="body">「小さく密度高く回す」を証明する → それ自体がモデルになる → 各地で再現される → 結果として広がっていく。まず一つの経済圏が「機能している」という実績が全てです。</p>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">スケールの考え方</div>
+        <div class="card-body">規模を先に追うのではなく、密度の高い循環を先に証明する。それが再現性の高いモデルになり、結果として地球規模の経済システムに育っていく。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">ベーシックインカム的機能</div>
+        <div class="card-body">月15万円分の価値がポイントで回る状態が証明できれば、単なるポイントサービスではなく、代替経済圏として機能しているという実証になる。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- 06 -->
+  <div class="section">
+    <div class="eyebrow">06 — あなたへ</div>
+    <div class="section-title serif">苦しみを経験したあなただからこそ、一緒にやれることがある。</div>
+    <p class="body">破綻を経験したこと、活動ができなくなったこと、それは全部、仕組みの捉え方の問題だった。あなたのせいじゃない。でも今、新プラットフォームという追い風がある。新たな仕組みが整いつつある。</p>
+    <div class="quote">
+      <div class="quote-text serif">「感情より仕組み。法則に則れば、自然と回る。人生と同じ。」</div>
+    </div>
+    <p class="body">生活することが応援になり、生きること、存在することが循環を生む。それは、仕組みの一部になるということ。宇宙の法則そのもの。</p>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer">
+    <span>吉田凪沙（なぎさ）｜世界観構築 × AIプロデュース｜パートナーID: 65289</span>
+    <span>2026年5月の新プラットフォーム発表を受けた提案</span>
+  </div>
+
+</div>
+<div class="header-line"></div>
+
+<script>
+  // パスワード認証
+  (function() {
+    const PASS = "000369000";
+    const KEY = "uword_auth";
+
+    function showContent() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      setTimeout(function() {
+        document.getElementById('hero').classList.add('visible');
+      }, 100);
+    }
+
+    function checkAuth() {
+      if (sessionStorage.getItem(KEY) === PASS) {
+        showContent();
+        return;
+      }
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('main-content').style.display = 'none';
+    }
+
+    window.addEventListener('load', checkAuth);
+
+    window.submitPassword = function() {
+      const input = document.getElementById('pass-input').value;
+      if (input === PASS) {
+        sessionStorage.setItem(KEY, PASS);
+        showContent();
+      } else {
+        document.getElementById('pass-error').style.display = 'block';
+        document.getElementById('pass-input').value = '';
+        document.getElementById('pass-input').focus();
+      }
+    };
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const screen = document.getElementById('auth-screen');
+        if (screen && screen.style.display !== 'none') {
+          window.submitPassword();
+        }
+      }
+    });
+  })();
+</script>
+</div><!-- /main-content -->
+
+</body>
+</html>
